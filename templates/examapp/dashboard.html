@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
+    <style>
+        :root {
+            --bg-start: #f5f8ff;
+            --bg-end: #eef6f2;
+            --card: #ffffff;
+            --primary: #1f5fbf;
+            --primary-dark: #134996;
+            --danger: #8f2626;
+            --text: #18212a;
+            --muted: #5e6e7e;
+            --line: #d8e0ea;
+            --soft: #f5f9ff;
+        }
+        * { box-sizing: border-box; }
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            color: var(--text);
+            background: linear-gradient(140deg, var(--bg-start), var(--bg-end));
+            min-height: 100vh;
+        }
+        .container {
+            width: min(980px, 92%);
+            margin: 36px auto;
+        }
+        .topbar {
+            background: var(--card);
+            border: 1px solid var(--line);
+            border-radius: 12px;
+            padding: 10px 12px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 14px;
+            box-shadow: 0 8px 16px rgba(26, 43, 69, 0.06);
+        }
+        .top-links {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+        .top-link {
+            text-decoration: none;
+            color: var(--text);
+            border: 1px solid var(--line);
+            background: #f8fbff;
+            border-radius: 8px;
+            padding: 7px 10px;
+            font-size: 13px;
+            font-weight: 700;
+        }
+        .top-link.active {
+            color: #fff;
+            background: var(--primary);
+            border-color: var(--primary);
+        }
+        .topbar form { margin: 0; }
+        .top-logout {
+            border: 0;
+            border-radius: 8px;
+            padding: 8px 12px;
+            font-size: 13px;
+            font-weight: 700;
+            cursor: pointer;
+            background: var(--danger);
+            color: #fff;
+        }
+        .hero {
+            background: var(--card);
+            border: 1px solid var(--line);
+            border-radius: 16px;
+            padding: 26px;
+            box-shadow: 0 12px 24px rgba(26, 43, 69, 0.08);
+        }
+        .badge {
+            display: inline-block;
+            padding: 6px 10px;
+            border-radius: 999px;
+            font-size: 12px;
+            font-weight: 700;
+            background: #e9f2ff;
+            color: #184f9e;
+            letter-spacing: 0.3px;
+        }
+        h1 {
+            margin: 12px 0 8px;
+            font-size: 30px;
+            line-height: 1.2;
+        }
+        .subtitle {
+            margin: 0;
+            color: var(--muted);
+            font-size: 16px;
+        }
+        .grid {
+            margin-top: 18px;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 14px;
+        }
+        .info-card {
+            background: var(--soft);
+            border: 1px solid #dbe8ff;
+            border-radius: 12px;
+            padding: 14px;
+        }
+        .info-card h3 {
+            margin: 0 0 6px;
+            font-size: 15px;
+        }
+        .info-card p {
+            margin: 0;
+            color: var(--muted);
+            font-size: 14px;
+            line-height: 1.45;
+        }
+        .actions {
+            margin-top: 22px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+        .btn,
+        button {
+            border: 0;
+            border-radius: 10px;
+            padding: 11px 16px;
+            font-size: 14px;
+            font-weight: 700;
+            cursor: pointer;
+            text-decoration: none;
+            transition: transform 0.15s ease, opacity 0.15s ease;
+        }
+        .btn:hover,
+        button:hover {
+            transform: translateY(-1px);
+            opacity: 0.95;
+        }
+        .btn-primary { background: var(--primary); color: #fff; }
+        .btn-primary:hover { background: var(--primary-dark); }
+        .btn-logout { background: var(--danger); color: #fff; }
+        @media (max-width: 860px) {
+            .grid { grid-template-columns: 1fr; }
+            h1 { font-size: 26px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <nav class="topbar">
+            <div class="top-links">
+                <a class="top-link active" href="{% url 'dashboard' %}">Dashboard</a>
+                <a class="top-link" href="{% url 'fill_exam_form' %}">Fill Form</a>
+            </div>
+            <form method="post" action="{% url 'logout' %}">
+                {% csrf_token %}
+                <button class="top-logout" type="submit">Logout</button>
+            </form>
+        </nav>
+
+        <section class="hero">
+            <span class="badge">Student Exam Portal</span>
+            <h1>Welcome, {{ request.user.username }}</h1>
+            <p class="subtitle">From this dashboard you can complete and submit your university exam form in a few steps.</p>
+
+            <div class="grid">
+                <article class="info-card">
+                    <h3>Step 1: Review Details</h3>
+                    <p>Keep your full name, course, year, address, and phone number ready before filling the form.</p>
+                </article>
+                <article class="info-card">
+                    <h3>Step 2: Submit Form</h3>
+                    <p>Use the "Fill Exam Form" button to submit your information and store it in the database.</p>
+                </article>
+                <article class="info-card">
+                    <h3>Step 3: Confirmation</h3>
+                    <p>After submission, a success page confirms your exam form is saved successfully.</p>
+                </article>
+            </div>
+
+            <div class="actions">
+                <a class="btn btn-primary" href="{% url 'fill_exam_form' %}">Fill Exam Form</a>
+            </div>
+
+        </section>
+    </div>
+</body>
+</html>

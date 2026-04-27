@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fill Exam Form</title>
+    <style>
+        :root {
+            --bg-start: #f6f9ff;
+            --bg-end: #edf6ee;
+            --card: #ffffff;
+            --line: #d8e2ee;
+            --text: #1a2530;
+            --muted: #5f7081;
+            --primary: #1f5fbf;
+            --primary-dark: #134996;
+            --secondary: #4f5f70;
+            --error: #b42318;
+        }
+        * { box-sizing: border-box; }
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            color: var(--text);
+            background: linear-gradient(130deg, var(--bg-start), var(--bg-end));
+            min-height: 100vh;
+        }
+        .container {
+            width: min(860px, 92%);
+            margin: 34px auto;
+            background: var(--card);
+            border: 1px solid var(--line);
+            border-radius: 16px;
+            box-shadow: 0 12px 24px rgba(24, 37, 58, 0.08);
+            overflow: hidden;
+        }
+        .topbar {
+            background: #ffffff;
+            border-bottom: 1px solid #d9e4f1;
+            padding: 10px 12px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 10px;
+        }
+        .top-links {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+        .top-link {
+            text-decoration: none;
+            color: var(--text);
+            border: 1px solid #d5e1ee;
+            background: #f8fbff;
+            border-radius: 8px;
+            padding: 7px 10px;
+            font-size: 13px;
+            font-weight: 700;
+        }
+        .top-link.active {
+            color: #fff;
+            background: var(--primary);
+            border-color: var(--primary);
+        }
+        .topbar form { margin: 0; }
+        .top-logout {
+            border: 0;
+            border-radius: 8px;
+            padding: 8px 12px;
+            font-size: 13px;
+            font-weight: 700;
+            cursor: pointer;
+            background: #8f2626;
+            color: #fff;
+        }
+        .header {
+            background: #f4f8ff;
+            border-bottom: 1px solid #d6e4ff;
+            padding: 20px 24px;
+        }
+        .header h1 {
+            margin: 0 0 6px;
+            font-size: 28px;
+        }
+        .header p {
+            margin: 0;
+            color: var(--muted);
+        }
+        form {
+            padding: 22px 24px 24px;
+        }
+        .field-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 14px;
+        }
+        .field {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+        .field.full {
+            grid-column: 1 / -1;
+        }
+        label {
+            font-weight: 700;
+            font-size: 14px;
+        }
+        input,
+        select,
+        textarea {
+            width: 100%;
+            padding: 10px 11px;
+            border: 1px solid #c7d4e3;
+            border-radius: 10px;
+            font-size: 14px;
+            background: #fff;
+        }
+        textarea { min-height: 94px; resize: vertical; }
+        .hint {
+            color: var(--muted);
+            font-size: 12px;
+        }
+        .errors {
+            margin-bottom: 14px;
+            padding: 10px 12px;
+            border: 1px solid #f5c2c0;
+            border-radius: 10px;
+            background: #fff3f2;
+            color: var(--error);
+            font-size: 14px;
+        }
+        .row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 18px;
+        }
+        .btn,
+        button {
+            text-decoration: none;
+            border: 0;
+            border-radius: 10px;
+            padding: 10px 15px;
+            cursor: pointer;
+            font-weight: 700;
+            font-size: 14px;
+            transition: transform 0.15s ease, opacity 0.15s ease;
+        }
+        .btn:hover,
+        button:hover {
+            transform: translateY(-1px);
+            opacity: 0.95;
+        }
+        .btn-submit { background: var(--primary); color: #fff; }
+        .btn-submit:hover { background: var(--primary-dark); }
+        .btn-back { display: inline-block; background: var(--secondary); color: #fff; }
+        @media (max-width: 760px) {
+            .field-grid { grid-template-columns: 1fr; }
+            .header h1 { font-size: 24px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <nav class="topbar">
+            <div class="top-links">
+                <a class="top-link" href="{% url 'dashboard' %}">Dashboard</a>
+                <a class="top-link active" href="{% url 'fill_exam_form' %}">Fill Form</a>
+            </div>
+            <form method="post" action="{% url 'logout' %}">
+                {% csrf_token %}
+                <button class="top-logout" type="submit">Logout</button>
+            </form>
+        </nav>
+
+        <div class="header">
+            <h1>University Exam Form</h1>
+            <p>Please fill all details carefully. The same required fields are kept as per assignment format.</p>
+        </div>
+        <form method="post">
+            {% csrf_token %}
+
+            {% if form.non_field_errors %}
+            <div class="errors">
+                {{ form.non_field_errors }}
+            </div>
+            {% endif %}
+
+            <div class="field-grid">
+                <div class="field full">
+                    <label for="{{ form.full_name.id_for_label }}">Full Name</label>
+                    {{ form.full_name }}
+                    {% if form.full_name.errors %}<div class="errors">{{ form.full_name.errors }}</div>{% endif %}
+                </div>
+
+                <div class="field">
+                    <label for="{{ form.course.id_for_label }}">Course</label>
+                    {{ form.course }}
+                    {% if form.course.errors %}<div class="errors">{{ form.course.errors }}</div>{% endif %}
+                </div>
+
+                <div class="field">
+                    <label for="{{ form.year.id_for_label }}">Year</label>
+                    {{ form.year }}
+                    {% if form.year.errors %}<div class="errors">{{ form.year.errors }}</div>{% endif %}
+                </div>
+
+                <div class="field full">
+                    <label for="{{ form.address.id_for_label }}">Address</label>
+                    {{ form.address }}
+                    <span class="hint">Include house number, street, city, and postal code.</span>
+                    {% if form.address.errors %}<div class="errors">{{ form.address.errors }}</div>{% endif %}
+                </div>
+
+                <div class="field full">
+                    <label for="{{ form.phone_number.id_for_label }}">Phone Number</label>
+                    {{ form.phone_number }}
+                    {% if form.phone_number.errors %}<div class="errors">{{ form.phone_number.errors }}</div>{% endif %}
+                </div>
+            </div>
+
+            <div class="row">
+                <button class="btn-submit" type="submit">Submit Form</button>
+                <a class="btn btn-back" href="{% url 'dashboard' %}">Back to Dashboard</a>
+            </div>
+        </form>
+    </div>
+</body>
+</html>

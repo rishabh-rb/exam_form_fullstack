@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Submission Successful</title>
+    <style>
+        :root {
+            --bg-start: #f4fbf5;
+            --bg-end: #edf3ff;
+            --card: #ffffff;
+            --line: #d5e2d8;
+            --text: #17222c;
+            --muted: #62707c;
+            --success: #137333;
+            --primary: #1f5fbf;
+            --primary-dark: #144b98;
+            --soft-success: #eaf8ef;
+        }
+        * { box-sizing: border-box; }
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            min-height: 100vh;
+            color: var(--text);
+            background: linear-gradient(140deg, var(--bg-start), var(--bg-end));
+            display: grid;
+            place-items: center;
+            padding: 24px;
+        }
+        .container {
+            width: min(760px, 100%);
+            background: var(--card);
+            border: 1px solid var(--line);
+            border-radius: 16px;
+            box-shadow: 0 16px 28px rgba(28, 44, 66, 0.09);
+            padding: 28px;
+            text-align: center;
+        }
+        .topbar {
+            border: 1px solid #dae6f5;
+            border-radius: 12px;
+            padding: 10px 12px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 16px;
+            background: #f8fbff;
+        }
+        .top-links {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+        .top-link {
+            text-decoration: none;
+            color: var(--text);
+            border: 1px solid #d5e1ee;
+            background: #ffffff;
+            border-radius: 8px;
+            padding: 7px 10px;
+            font-size: 13px;
+            font-weight: 700;
+        }
+        .top-link.active {
+            color: #fff;
+            background: var(--primary);
+            border-color: var(--primary);
+        }
+        .topbar form { margin: 0; }
+        .top-logout {
+            border: 0;
+            border-radius: 8px;
+            padding: 8px 12px;
+            font-size: 13px;
+            font-weight: 700;
+            cursor: pointer;
+            background: #8f2626;
+            color: #fff;
+        }
+        .icon {
+            width: 62px;
+            height: 62px;
+            margin: 0 auto 12px;
+            border-radius: 50%;
+            background: var(--soft-success);
+            border: 1px solid #b7e5c4;
+            display: grid;
+            place-items: center;
+            color: var(--success);
+            font-size: 30px;
+            font-weight: 700;
+        }
+        h1 {
+            margin: 0 0 8px;
+            font-size: 30px;
+        }
+        .lead {
+            margin: 0 auto;
+            max-width: 560px;
+            color: var(--muted);
+            font-size: 16px;
+            line-height: 1.6;
+        }
+        .summary {
+            margin-top: 18px;
+            text-align: left;
+            background: #f7fbff;
+            border: 1px solid #dae7f7;
+            border-radius: 12px;
+            padding: 14px;
+        }
+        .summary h3 {
+            margin: 0 0 8px;
+            font-size: 16px;
+        }
+        .summary ul {
+            margin: 0;
+            padding-left: 18px;
+            color: var(--muted);
+            line-height: 1.6;
+            font-size: 14px;
+        }
+        .actions {
+            margin-top: 20px;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 10px;
+        }
+        .btn {
+            text-decoration: none;
+            background: var(--primary);
+            color: #fff;
+            border-radius: 10px;
+            padding: 10px 16px;
+            font-weight: 700;
+            font-size: 14px;
+            transition: transform 0.15s ease, opacity 0.15s ease;
+        }
+        .btn:hover {
+            background: var(--primary-dark);
+            transform: translateY(-1px);
+            opacity: 0.95;
+        }
+        @media (max-width: 640px) {
+            h1 { font-size: 24px; }
+            .container { padding: 22px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <nav class="topbar">
+            <div class="top-links">
+                <a class="top-link" href="{% url 'dashboard' %}">Dashboard</a>
+                <a class="top-link active" href="{% url 'fill_exam_form' %}">Fill Form</a>
+            </div>
+            <form method="post" action="{% url 'logout' %}">
+                {% csrf_token %}
+                <button class="top-logout" type="submit">Logout</button>
+            </form>
+        </nav>
+
+        <div class="icon">OK</div>
+        <h1>Form Submitted Successfully</h1>
+        <p class="lead">Your exam form details have been saved in the database. Keep your login credentials safe for future updates.</p>
+
+        <section class="summary">
+            <h3>What happened next</h3>
+            <ul>
+                <li>Your submitted details are now stored in the exam form table.</li>
+                <li>You can return to the dashboard to continue browsing portal options.</li>
+                <li>Admins can verify records from the Django admin panel.</li>
+            </ul>
+        </section>
+
+        <div class="actions">
+            <a class="btn" href="{% url 'dashboard' %}">Go to Dashboard</a>
+            <a class="btn" href="{% url 'fill_exam_form' %}">Submit Another Form</a>
+        </div>
+    </div>
+</body>
+</html>
